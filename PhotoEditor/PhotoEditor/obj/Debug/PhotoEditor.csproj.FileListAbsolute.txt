@@ -1,0 +1,20 @@
+C:\Users\user1\Desktop\l7\PhotoEditor\PhotoEditor\bin\Debug\PhotoEditor.exe.config
+C:\Users\user1\Desktop\l7\PhotoEditor\PhotoEditor\obj\Debug\PhotoEditor.csprojResolveAssemblyReference.cache
+C:\Users\user1\Desktop\l7\PhotoEditor\PhotoEditor\obj\Debug\PhotoEditor.Properties.Resources.resources
+C:\Users\user1\Desktop\l7\PhotoEditor\PhotoEditor\obj\Debug\PhotoEditor.csproj.GenerateResource.Cache
+C:\Users\user1\Desktop\l7\PhotoEditor\PhotoEditor\bin\Debug\PhotoEditor.exe
+C:\Users\user1\Desktop\l7\PhotoEditor\PhotoEditor\bin\Debug\PhotoEditor.pdb
+C:\Users\user1\Desktop\l7\PhotoEditor\PhotoEditor\obj\Debug\PhotoEditor.exe
+C:\Users\user1\Desktop\l7\PhotoEditor\PhotoEditor\obj\Debug\PhotoEditor.pdb
+C:\Users\user1\Desktop\l7\PhotoEditor\PhotoEditor\obj\Debug\PhotoEditor.Registration.resources
+C:\Users\user1\Desktop\OOSE Project\PhotoEditor\PhotoEditor\bin\Debug\PhotoEditor.exe.config
+C:\Users\user1\Desktop\OOSE Project\PhotoEditor\PhotoEditor\obj\Debug\PhotoEditor.exe
+C:\Users\user1\Desktop\OOSE Project\PhotoEditor\PhotoEditor\obj\Debug\PhotoEditor.pdb
+C:\Users\user1\Desktop\OOSE Project\PhotoEditor\PhotoEditor\obj\Debug\PhotoEditor.csprojResolveAssemblyReference.cache
+C:\Users\user1\Desktop\OOSE Project\PhotoEditor\PhotoEditor\obj\Debug\PhotoEditor.Properties.Resources.resources
+C:\Users\user1\Desktop\OOSE Project\PhotoEditor\PhotoEditor\obj\Debug\PhotoEditor.Registration.resources
+C:\Users\user1\Desktop\OOSE Project\PhotoEditor\PhotoEditor\obj\Debug\PhotoEditor.csproj.GenerateResource.Cache
+C:\Users\user1\Desktop\OOSE Project\PhotoEditor\PhotoEditor\bin\Debug\PhotoEditor.exe
+C:\Users\user1\Desktop\OOSE Project\PhotoEditor\PhotoEditor\bin\Debug\PhotoEditor.pdb
+C:\Users\user1\Desktop\OOSE Project\PhotoEditor\PhotoEditor\obj\Debug\PhotoEditor.Editor.resources
+C:\Users\user1\Desktop\OOSE Project\PhotoEditor\PhotoEditor\obj\Debug\PhotoEditor.Login.resources
