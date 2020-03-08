@@ -20,18 +20,20 @@ namespace PhotoEditor
             InitializeComponent();
         }
 
-        Form par;
+        Editor par;
         public Login(Form parent)
         {
             InitializeComponent();
-            this.par = parent;
+            this.par = (Editor)parent;
         }
         private void button1_Click(object sender, EventArgs e)
         {
             email = textBox1.Text;
             pass = textBox2.Text;
             this.Hide();
+            this.par.ReloadEditor();
             this.par.Visible = true;
+            
         }
 
         private void Login_FormClosing(object sender, FormClosingEventArgs e)
