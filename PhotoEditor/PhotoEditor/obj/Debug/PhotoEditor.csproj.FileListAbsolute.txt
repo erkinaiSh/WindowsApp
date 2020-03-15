@@ -18,3 +18,14 @@ C:\Users\user1\Desktop\OOSE Project\PhotoEditor\PhotoEditor\bin\Debug\PhotoEdito
 C:\Users\user1\Desktop\OOSE Project\PhotoEditor\PhotoEditor\bin\Debug\PhotoEditor.pdb
 C:\Users\user1\Desktop\OOSE Project\PhotoEditor\PhotoEditor\obj\Debug\PhotoEditor.Editor.resources
 C:\Users\user1\Desktop\OOSE Project\PhotoEditor\PhotoEditor\obj\Debug\PhotoEditor.Login.resources
+E:\OOSE Project\OOSE-Project\PhotoEditor\PhotoEditor\bin\Debug\PhotoEditor.exe.config
+E:\OOSE Project\OOSE-Project\PhotoEditor\PhotoEditor\obj\Debug\PhotoEditor.exe
+E:\OOSE Project\OOSE-Project\PhotoEditor\PhotoEditor\obj\Debug\PhotoEditor.pdb
+E:\OOSE Project\OOSE-Project\PhotoEditor\PhotoEditor\bin\Debug\PhotoEditor.exe
+E:\OOSE Project\OOSE-Project\PhotoEditor\PhotoEditor\bin\Debug\PhotoEditor.pdb
+E:\OOSE Project\OOSE-Project\PhotoEditor\PhotoEditor\obj\Debug\PhotoEditor.csprojResolveAssemblyReference.cache
+E:\OOSE Project\OOSE-Project\PhotoEditor\PhotoEditor\obj\Debug\PhotoEditor.Editor.resources
+E:\OOSE Project\OOSE-Project\PhotoEditor\PhotoEditor\obj\Debug\PhotoEditor.Login.resources
+E:\OOSE Project\OOSE-Project\PhotoEditor\PhotoEditor\obj\Debug\PhotoEditor.Properties.Resources.resources
+E:\OOSE Project\OOSE-Project\PhotoEditor\PhotoEditor\obj\Debug\PhotoEditor.Registration.resources
+E:\OOSE Project\OOSE-Project\PhotoEditor\PhotoEditor\obj\Debug\PhotoEditor.csproj.GenerateResource.Cache

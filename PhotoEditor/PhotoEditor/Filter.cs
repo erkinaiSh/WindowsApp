@@ -17,7 +17,5 @@ namespace PhotoEditor
         private int Id { get; set; }
         
         private String Name { get; set; }    
-
-
     }
 }

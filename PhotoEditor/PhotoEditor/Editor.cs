@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,9 +17,13 @@ namespace PhotoEditor
         Registration r;
         Login l;
         Bitmap tempbm;
+
         public Editor()
         {
             InitializeComponent();
+            if (pictureBox2.Image == null)
+                Download.Hide();
+
             if (!string.IsNullOrEmpty(Login.email) && !string.IsNullOrEmpty(Login.pass)){
                 
 
@@ -36,12 +42,16 @@ namespace PhotoEditor
                 Profile.Hide();
             }
         }
+
         public void ReloadEditor() {
+
             if (!string.IsNullOrEmpty(Login.email) && !string.IsNullOrEmpty(Login.pass))
             {
 
+                if (pictureBox2.Image == null)
+                    Download.Hide();
 
-                if (Login.email == "abc" && Login.pass == "abc")
+                if (Login.status)
                 {
                     
                     contextMenuStrip1.Items.Add("Username : " + Login.pass);
@@ -58,41 +68,22 @@ namespace PhotoEditor
                 Profile.Hide();
             }
         }
+
         private void Options_Click(object sender, EventArgs e)
         {
             contextMenuStrip2.Show(Options, new Point(0, Options.Height));
         }
 
-        private void contextMenuStrip2_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
-        {
-            if (e.ClickedItem.Text.Equals("Register"))
-            {
-                r = new Registration(this);
-                r.Show();
-                this.Hide();
-
-            }
-            if (e.ClickedItem.Text.Equals("Login"))
-            {
-                l = new Login(this);
-                l.Show();
-                this.Hide();
-
-            }
-        }
-
-
         private void Profile_Click(object sender, EventArgs e)
         {
             contextMenuStrip1.Show(Options, new Point(0, Options.Height));
-
         }
 
 
         private void Upload_Click(object sender, EventArgs e)
         {
             OpenFileDialog opnfd = new OpenFileDialog();
-            opnfd.Filter = "Image Files (*.jpg;*.jpeg;.*.gif;)|*.jpg;*.jpeg;.*.gif";
+            opnfd.Filter = "Image Files(*.jpeg;*.bmp;*.png;*.jpg)|*.jpeg;*.bmp;*.png;*.jpg";
             if (opnfd.ShowDialog() == DialogResult.OK)
             {
                 pictureBox1.Image = new Bitmap(opnfd.FileName);
@@ -101,13 +92,54 @@ namespace PhotoEditor
             }
         }
 
+        private void Download_Click(object sender, EventArgs e)
+        {   if (pictureBox2.Image != null)
+            {
+                SaveFileDialog sfd = new SaveFileDialog();
+                sfd.DefaultExt = "png";
+                sfd.Filter = "Images|*.png;*.bmp;*.jpg";
+                ImageFormat format = ImageFormat.Png;
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    string ext = System.IO.Path.GetExtension(sfd.FileName);
+                    switch (ext)
+                    {
+                        case ".jpg":
+                            format = ImageFormat.Jpeg;
+                            break;
+                        case ".bmp":
+                            format = ImageFormat.Bmp;
+                            break;
+                    }
+                    pictureBox2.Image.Save(sfd.FileName, format);
+                    MessageBox.Show("Image Saved Succesfully at location : \n" + sfd.FileName);
+                }
+
+            }
+        }
+
+
+        private void registerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            r = new Registration(this);
+            r.Show();
+            this.Hide();
+        }
+
+        private void loginToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            l = new Login(this);
+            l.Show();
+            this.Hide();
+        }
+
         private void logoutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             l.Dispose();
             contextMenuStrip1.Items.RemoveAt(1);
             contextMenuStrip1.Items.RemoveAt(1);
             pictureBox1.Image = null;
-
+            Download.Hide();
             pictureBox2.Image = null;
             Profile.Hide();
             Options.Show();
@@ -137,6 +169,7 @@ namespace PhotoEditor
 
         private void Clear_Click(object sender, EventArgs e)
         {
+            Download.Hide();
             pictureBox1.Image = null;
             pictureBox2.Image = null;
         }
@@ -202,8 +235,7 @@ namespace PhotoEditor
         Color.FromArgb((byte)cR, (byte)cG, (byte)cB));
                 }
             }
-            pictureBox2.Image = (Bitmap)bmap;
-            //tempbm = bmap;
+            pictureBox2.Image = (Bitmap)bmap;      
 
         }
 
@@ -258,7 +290,7 @@ namespace PhotoEditor
                 }
             }
             pictureBox2.Image = (Bitmap)bmap;
-            //tempbm = bmap;
+            
         }
 
         private void Contrast_Scroll(object sender, EventArgs e)
@@ -269,5 +301,7 @@ namespace PhotoEditor
                 SetContrast(Contrast.Value);
             }
         }
+
+        
     }
 }

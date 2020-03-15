@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -13,8 +14,11 @@ namespace PhotoEditor
     public partial class Login : Form
     {
         public static string email ;
+        public static string constring = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=PhotoEditor;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
         public static string pass ;
+
+        public static bool status;
         public Login()
         {
             InitializeComponent();
@@ -28,11 +32,33 @@ namespace PhotoEditor
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            email = textBox1.Text;
-            pass = textBox2.Text;
-            this.Hide();
-            this.par.ReloadEditor();
-            this.par.Visible = true;
+            using (SqlConnection con = new SqlConnection(constring))
+            {
+
+                string query = "select * from [User] where Email=@email and Password=@pass";
+                SqlCommand cmd = new SqlCommand(query, con);
+                cmd.Parameters.Add(new SqlParameter("@email", textBox1.Text));
+                cmd.Parameters.Add(new SqlParameter("@pass", textBox2.Text));
+                con.Open();
+                SqlDataReader rd = cmd.ExecuteReader();
+                if (!rd.HasRows)
+                {
+                    label4.Text = "Invalid Email or Password";
+                }
+                else
+                {
+                    while (rd.Read())
+                    {
+                        email = rd["Email"].ToString();
+                        pass = rd["Password"].ToString();
+                    }
+                    Login.status = true;
+                    this.Hide();
+                    this.par.ReloadEditor();
+                    this.par.Visible = true;
+                }
+            }
+            
             
         }
 

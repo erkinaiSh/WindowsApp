@@ -49,6 +49,7 @@
             this.Upload = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.Download = new System.Windows.Forms.Button();
             this.contextMenuStrip1.SuspendLayout();
             this.contextMenuStrip2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -119,6 +120,7 @@
             this.logoutToolStripMenuItem.Name = "logoutToolStripMenuItem";
             this.logoutToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
             this.logoutToolStripMenuItem.Text = "Logout";
+            this.logoutToolStripMenuItem.Click += new System.EventHandler(this.logoutToolStripMenuItem_Click);
             // 
             // contextMenuStrip2
             // 
@@ -133,12 +135,14 @@
             this.registerToolStripMenuItem.Name = "registerToolStripMenuItem";
             this.registerToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.registerToolStripMenuItem.Text = "Register";
+            this.registerToolStripMenuItem.Click += new System.EventHandler(this.registerToolStripMenuItem_Click);
             // 
             // loginToolStripMenuItem
             // 
             this.loginToolStripMenuItem.Name = "loginToolStripMenuItem";
             this.loginToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.loginToolStripMenuItem.Text = "Login";
+            this.loginToolStripMenuItem.Click += new System.EventHandler(this.loginToolStripMenuItem_Click);
             // 
             // Flip
             // 
@@ -236,9 +240,20 @@
             this.label4.Size = new System.Drawing.Size(0, 13);
             this.label4.TabIndex = 16;
             // 
+            // Download
+            // 
+            this.Download.Location = new System.Drawing.Point(397, 22);
+            this.Download.Name = "Download";
+            this.Download.Size = new System.Drawing.Size(75, 23);
+            this.Download.TabIndex = 17;
+            this.Download.Text = "Download";
+            this.Download.UseVisualStyleBackColor = true;
+            this.Download.Click += new System.EventHandler(this.Download_Click);
+            // 
             // Editor
             // 
             this.ClientSize = new System.Drawing.Size(908, 501);
+            this.Controls.Add(this.Download);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.Upload);
@@ -288,5 +303,6 @@
         private System.Windows.Forms.Button Upload;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button Download;
     }
 }
