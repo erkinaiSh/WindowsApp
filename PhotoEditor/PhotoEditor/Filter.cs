@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PhotoEditor
 {
-    class Filter
+    public class Filter
     {
         public Filter(int id, string name)
         {

@@ -14,20 +14,34 @@ namespace PhotoEditor
 {
     public partial class Editor : Form
     {
+        Stack<Bitmap> UChanges = new Stack<Bitmap>(5);
+        Stack<Bitmap> RChanges = new Stack<Bitmap>(5);
         Registration r;
         Login l;
         Bitmap tempbm;
+
+        public void UCAdd(Bitmap img)
+        {
+            UChanges.Push(img);
+            Undo.Enabled = true;
+        }
+
+        public void RCAdd(Bitmap img)
+        {
+            RChanges.Push(img);
+            Redo.Enabled = true;
+        }
 
         public Editor()
         {
             InitializeComponent();
             if (pictureBox2.Image == null)
-                Download.Hide();
+                Download.Enabled=false;
 
             if (!string.IsNullOrEmpty(Login.email) && !string.IsNullOrEmpty(Login.pass)){
                 
 
-                if (Login.email=="abc" && Login.pass == "abc")
+                if (Login.status)
                 {
                     MessageBox.Show(Login.pass +" "+ Login.email);
 
@@ -49,7 +63,7 @@ namespace PhotoEditor
             {
 
                 if (pictureBox2.Image == null)
-                    Download.Hide();
+                    Download.Enabled = false;
 
                 if (Login.status)
                 {
@@ -58,8 +72,7 @@ namespace PhotoEditor
                     contextMenuStrip1.Items.Add("Password : " + Login.email);
                     Options.Hide();
                     Profile.Show();
-                    pictureBox1.Image = null;
-                    pictureBox2.Image = null;
+                    NoImage();
                 }
             }
             else
@@ -88,7 +101,16 @@ namespace PhotoEditor
             {
                 pictureBox1.Image = new Bitmap(opnfd.FileName);
                 tempbm = new Bitmap(opnfd.FileName);
+                Clear.Enabled = true;
+                Invert.Enabled = true;
+                Flip.Enabled = true;
+                Greyscale.Enabled = true;
+                Contrast.Enabled = true;
+                Fog.Enabled = true;
+                Brightness.Enabled = true;
                 pictureBox2.Image = null;
+                RChanges.Clear();
+                UChanges.Clear();
             }
         }
 
@@ -138,9 +160,7 @@ namespace PhotoEditor
             l.Dispose();
             contextMenuStrip1.Items.RemoveAt(1);
             contextMenuStrip1.Items.RemoveAt(1);
-            pictureBox1.Image = null;
-            Download.Hide();
-            pictureBox2.Image = null;
+            NoImage();
             Profile.Hide();
             Options.Show();
         }
@@ -149,8 +169,11 @@ namespace PhotoEditor
         {
             if (pictureBox1.Image != null)
             {
+
+                Download.Enabled = true;
                 Bitmap bmap = tempbm;
 
+                UCAdd((Bitmap)tempbm);
                 Color c;
                 for (int i = 0; i < bmap.Width; i++)
                 {
@@ -162,23 +185,32 @@ namespace PhotoEditor
                         bmap.SetPixel(i, j, Color.FromArgb(gray, gray, gray));
                     }
                 }
-                pictureBox2.Image = (Bitmap)bmap;
+                pictureBox2.Image = bmap;
                 tempbm = bmap;
+                RChanges.Clear();
             }
         }
 
         private void Clear_Click(object sender, EventArgs e)
         {
-            Download.Hide();
-            pictureBox1.Image = null;
-            pictureBox2.Image = null;
+            Brightness.Value = 0;
+            Contrast.Value = 0;
+            NoImage();
+            RChanges.Clear();
+            UChanges.Clear();
+            Undo.Enabled = false;
+            Redo.Enabled = false;
         }
 
         private void Invert_Click(object sender, EventArgs e)
         {
             if (pictureBox1.Image != null)
             {
+
+                Download.Enabled = true;
                 Bitmap bmap = tempbm;
+
+                UCAdd((Bitmap)tempbm);
                 Color c;
                 for (int i = 0; i < bmap.Width; i++)
                 {
@@ -189,8 +221,37 @@ namespace PhotoEditor
           Color.FromArgb(255 - c.R, 255 - c.G, 255 - c.B));
                     }
                 }
-                pictureBox2.Image = (Bitmap)bmap;
+                pictureBox2.Image = bmap;
                 tempbm = bmap;
+                RChanges.Clear();
+            }
+        }
+
+        private void Fog_Click(object sender, EventArgs e)
+        {
+            if (pictureBox1.Image != null)
+            {
+                Download.Enabled = true;
+                Bitmap bmap = tempbm;
+
+                UCAdd((Bitmap)tempbm);
+                Bitmap bmpInverted = new Bitmap(bmap.Width, bmap.Height);
+                ImageAttributes ia = new ImageAttributes();                 
+                ColorMatrix cmPicture = new ColorMatrix(new float[][]       
+                {
+                    new float[]{1+0.3f, 0, 0, 0, 0},
+            new float[]{0, 1+0.7f, 0, 0, 0},
+            new float[]{0, 0, 1+1.3f, 0, 0},
+            new float[]{0, 0, 0, 1, 0},
+            new float[]{0, 0, 0, 0, 1}
+                });
+                ia.SetColorMatrix(cmPicture);
+                Graphics g = Graphics.FromImage(bmpInverted);
+                g.DrawImage(bmap, new Rectangle(0, 0, bmap.Width, bmap.Height), 0, 0, bmap.Width, bmap.Height, GraphicsUnit.Pixel, ia);
+                g.Dispose();
+                pictureBox2.Image = bmpInverted;
+                tempbm = bmpInverted;
+                RChanges.Clear();
             }
         }
 
@@ -198,16 +259,21 @@ namespace PhotoEditor
         {
             if (pictureBox1.Image != null)
             {
+                Download.Enabled = true;
                 Bitmap bmap = tempbm;
 
+                UCAdd((Bitmap)tempbm);
                 bmap.RotateFlip(RotateFlipType.Rotate180FlipY);
-                pictureBox2.Image = (Bitmap)bmap;
+                pictureBox2.Image = bmap;
+
                 tempbm = bmap;
+                RChanges.Clear();
             }
         }
 
         public void SetBrightness(int brightness)
         {
+            Download.Enabled = true;
             //Bitmap temp = (Bitmap)_currentBitmap;
             Bitmap bmap = (Bitmap)tempbm.Clone();
             if (brightness < -255) brightness = -255;
@@ -235,7 +301,7 @@ namespace PhotoEditor
         Color.FromArgb((byte)cR, (byte)cG, (byte)cB));
                 }
             }
-            pictureBox2.Image = (Bitmap)bmap;      
+            pictureBox2.Image = bmap;      
 
         }
 
@@ -243,6 +309,7 @@ namespace PhotoEditor
         {
             if (pictureBox1.Image != null)
             {
+                Download.Enabled = true;
                 label4.Text = Brightness.Value.ToString();
                 SetBrightness(Brightness.Value);
             }
@@ -250,6 +317,8 @@ namespace PhotoEditor
 
         public void SetContrast(double contrast)
         {
+
+            Download.Enabled = true;
             Bitmap bmap = (Bitmap)tempbm.Clone();
             if (contrast < -100) contrast = -100;
             if (contrast > 100) contrast = 100;
@@ -289,7 +358,7 @@ namespace PhotoEditor
         Color.FromArgb((byte)pR, (byte)pG, (byte)pB));
                 }
             }
-            pictureBox2.Image = (Bitmap)bmap;
+            pictureBox2.Image = bmap;
             
         }
 
@@ -297,11 +366,82 @@ namespace PhotoEditor
         {
             if (pictureBox1.Image != null)
             {
+                Download.Enabled = true;    
                 label3.Text = Contrast.Value.ToString();
                 SetContrast(Contrast.Value);
             }
         }
 
-        
+        private void Filter_Click(object sender, EventArgs e)
+        {
+            Adjustment.Enabled = true;
+            Filter.Enabled = false;
+            panel2.Visible = true;
+            panel1.Visible = false;
+        }
+
+        private void Adjustment_Click(object sender, EventArgs e)
+        {
+            Adjustment.Enabled = false;
+            Filter.Enabled = true;
+            panel2.Visible = false;
+            panel1.Visible = true;
+        }
+
+
+        private void NoImage()
+        {
+            Clear.Enabled = false;
+            Download.Enabled = false;
+            pictureBox1.Image = null;
+            pictureBox2.Image = null;
+            Invert.Enabled = false;
+            Greyscale.Enabled = false;
+            Flip.Enabled = false;
+            Fog.Enabled = false;
+            Brightness.Enabled = false;
+            Contrast.Enabled = false;
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Undo_Click(object sender, EventArgs e)
+        {
+            if (UChanges.Count != 0)
+            {
+                RCAdd((Bitmap)pictureBox2.Image);
+                pictureBox2.Image = UChanges.Pop();
+                tempbm = (Bitmap)pictureBox2.Image.Clone();
+                if (UChanges.Count == 0)
+                {
+                    Undo.Enabled = false;
+                }
+                else
+                {
+                    Undo.Enabled = true;
+                }
+            }
+        }
+
+        private void Redo_Click(object sender, EventArgs e)
+        {
+            if (RChanges.Count != 0)
+            {
+                UCAdd((Bitmap)pictureBox2.Image);
+                pictureBox2.Image = RChanges.Pop();
+                tempbm = (Bitmap)pictureBox2.Image.Clone();
+                if (RChanges.Count == 0)
+                {
+                    Redo.Enabled = false;
+                }
+                else
+                {
+                    Redo.Enabled = true;
+                }
+            }
+        }
     }
 }

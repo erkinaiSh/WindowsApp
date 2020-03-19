@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PhotoEditor
 {
-    class Admin : User
+    public class Admin : User
     {
         
         private List<Client> Clients { get; set; }

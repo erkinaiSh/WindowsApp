@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PhotoEditor
 {
-    class User
+    public class User
     {
         public User(int id, string name, string phoneNo, string email, string password)
         {

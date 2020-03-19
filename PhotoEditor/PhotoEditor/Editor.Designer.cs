@@ -42,20 +42,29 @@
             this.Flip = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.Upload = new System.Windows.Forms.Button();
+            this.Download = new System.Windows.Forms.Button();
+            this.Fog = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.Brightness = new System.Windows.Forms.TrackBar();
             this.Contrast = new System.Windows.Forms.TrackBar();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.Upload = new System.Windows.Forms.Button();
-            this.label3 = new System.Windows.Forms.Label();
+            this.Filter = new System.Windows.Forms.Button();
+            this.Adjustment = new System.Windows.Forms.Button();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.label4 = new System.Windows.Forms.Label();
-            this.Download = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.Undo = new System.Windows.Forms.Button();
+            this.Redo = new System.Windows.Forms.Button();
             this.contextMenuStrip1.SuspendLayout();
             this.contextMenuStrip2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Brightness)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Contrast)).BeginInit();
+            this.panel1.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // Options
@@ -80,7 +89,8 @@
             // 
             // Clear
             // 
-            this.Clear.Location = new System.Drawing.Point(569, 22);
+            this.Clear.Enabled = false;
+            this.Clear.Location = new System.Drawing.Point(93, 22);
             this.Clear.Name = "Clear";
             this.Clear.Size = new System.Drawing.Size(75, 23);
             this.Clear.TabIndex = 2;
@@ -90,7 +100,8 @@
             // 
             // Invert
             // 
-            this.Invert.Location = new System.Drawing.Point(113, 22);
+            this.Invert.Enabled = false;
+            this.Invert.Location = new System.Drawing.Point(12, 55);
             this.Invert.Name = "Invert";
             this.Invert.Size = new System.Drawing.Size(75, 23);
             this.Invert.TabIndex = 3;
@@ -100,7 +111,8 @@
             // 
             // Greyscale
             // 
-            this.Greyscale.Location = new System.Drawing.Point(208, 22);
+            this.Greyscale.Enabled = false;
+            this.Greyscale.Location = new System.Drawing.Point(122, 55);
             this.Greyscale.Name = "Greyscale";
             this.Greyscale.Size = new System.Drawing.Size(75, 23);
             this.Greyscale.TabIndex = 4;
@@ -146,7 +158,8 @@
             // 
             // Flip
             // 
-            this.Flip.Location = new System.Drawing.Point(305, 22);
+            this.Flip.Enabled = false;
+            this.Flip.Location = new System.Drawing.Point(12, 12);
             this.Flip.Name = "Flip";
             this.Flip.Size = new System.Drawing.Size(75, 23);
             this.Flip.TabIndex = 7;
@@ -172,48 +185,6 @@
             this.pictureBox2.TabIndex = 9;
             this.pictureBox2.TabStop = false;
             // 
-            // Brightness
-            // 
-            this.Brightness.Location = new System.Drawing.Point(713, 230);
-            this.Brightness.Maximum = 50;
-            this.Brightness.Minimum = -50;
-            this.Brightness.Name = "Brightness";
-            this.Brightness.Size = new System.Drawing.Size(183, 45);
-            this.Brightness.TabIndex = 10;
-            this.Brightness.TickFrequency = 2;
-            this.Brightness.TickStyle = System.Windows.Forms.TickStyle.Both;
-            this.Brightness.Scroll += new System.EventHandler(this.Brightness_Scroll);
-            // 
-            // Contrast
-            // 
-            this.Contrast.Location = new System.Drawing.Point(713, 126);
-            this.Contrast.Maximum = 50;
-            this.Contrast.Minimum = -50;
-            this.Contrast.Name = "Contrast";
-            this.Contrast.Size = new System.Drawing.Size(183, 45);
-            this.Contrast.TabIndex = 11;
-            this.Contrast.TickFrequency = 2;
-            this.Contrast.TickStyle = System.Windows.Forms.TickStyle.Both;
-            this.Contrast.Scroll += new System.EventHandler(this.Contrast_Scroll);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(787, 174);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(46, 13);
-            this.label1.TabIndex = 12;
-            this.label1.Text = "Contrast";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(777, 278);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(56, 13);
-            this.label2.TabIndex = 13;
-            this.label2.Text = "Brightness";
-            // 
             // Upload
             // 
             this.Upload.Location = new System.Drawing.Point(12, 22);
@@ -224,25 +195,9 @@
             this.Upload.UseVisualStyleBackColor = true;
             this.Upload.Click += new System.EventHandler(this.Upload_Click);
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(839, 174);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(0, 13);
-            this.label3.TabIndex = 15;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(839, 278);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(0, 13);
-            this.label4.TabIndex = 16;
-            // 
             // Download
             // 
-            this.Download.Location = new System.Drawing.Point(397, 22);
+            this.Download.Location = new System.Drawing.Point(174, 22);
             this.Download.Name = "Download";
             this.Download.Size = new System.Drawing.Size(75, 23);
             this.Download.TabIndex = 17;
@@ -250,22 +205,159 @@
             this.Download.UseVisualStyleBackColor = true;
             this.Download.Click += new System.EventHandler(this.Download_Click);
             // 
+            // Fog
+            // 
+            this.Fog.Enabled = false;
+            this.Fog.Location = new System.Drawing.Point(122, 12);
+            this.Fog.Name = "Fog";
+            this.Fog.Size = new System.Drawing.Size(75, 23);
+            this.Fog.TabIndex = 8;
+            this.Fog.Text = "Fog";
+            this.Fog.UseVisualStyleBackColor = true;
+            this.Fog.Click += new System.EventHandler(this.Fog_Click);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(32, 127);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(56, 13);
+            this.label2.TabIndex = 13;
+            this.label2.Text = "Brightness";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(32, 51);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(46, 13);
+            this.label1.TabIndex = 12;
+            this.label1.Text = "Contrast";
+            // 
+            // Brightness
+            // 
+            this.Brightness.Enabled = false;
+            this.Brightness.Location = new System.Drawing.Point(22, 79);
+            this.Brightness.Maximum = 50;
+            this.Brightness.Minimum = -50;
+            this.Brightness.Name = "Brightness";
+            this.Brightness.Size = new System.Drawing.Size(186, 45);
+            this.Brightness.TabIndex = 10;
+            this.Brightness.TickFrequency = 2;
+            this.Brightness.TickStyle = System.Windows.Forms.TickStyle.Both;
+            this.Brightness.Scroll += new System.EventHandler(this.Brightness_Scroll);
+            // 
+            // Contrast
+            // 
+            this.Contrast.Enabled = false;
+            this.Contrast.Location = new System.Drawing.Point(22, 3);
+            this.Contrast.Maximum = 50;
+            this.Contrast.Minimum = -50;
+            this.Contrast.Name = "Contrast";
+            this.Contrast.Size = new System.Drawing.Size(186, 45);
+            this.Contrast.TabIndex = 11;
+            this.Contrast.TickFrequency = 2;
+            this.Contrast.TickStyle = System.Windows.Forms.TickStyle.Both;
+            this.Contrast.Scroll += new System.EventHandler(this.Contrast_Scroll);
+            // 
+            // Filter
+            // 
+            this.Filter.Enabled = false;
+            this.Filter.Location = new System.Drawing.Point(821, 73);
+            this.Filter.Name = "Filter";
+            this.Filter.Size = new System.Drawing.Size(75, 23);
+            this.Filter.TabIndex = 19;
+            this.Filter.Text = "Filter";
+            this.Filter.UseVisualStyleBackColor = true;
+            this.Filter.Click += new System.EventHandler(this.Filter_Click);
+            // 
+            // Adjustment
+            // 
+            this.Adjustment.Location = new System.Drawing.Point(740, 73);
+            this.Adjustment.Name = "Adjustment";
+            this.Adjustment.Size = new System.Drawing.Size(75, 23);
+            this.Adjustment.TabIndex = 20;
+            this.Adjustment.Text = "Adjustment";
+            this.Adjustment.UseVisualStyleBackColor = true;
+            this.Adjustment.Click += new System.EventHandler(this.Adjustment_Click);
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.label4);
+            this.panel1.Controls.Add(this.label3);
+            this.panel1.Controls.Add(this.label2);
+            this.panel1.Controls.Add(this.Contrast);
+            this.panel1.Controls.Add(this.Brightness);
+            this.panel1.Controls.Add(this.label1);
+            this.panel1.Location = new System.Drawing.Point(688, 116);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(217, 154);
+            this.panel1.TabIndex = 22;
+            this.panel1.Visible = false;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(123, 127);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(0, 13);
+            this.label4.TabIndex = 15;
+            this.label4.Click += new System.EventHandler(this.label4_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(123, 51);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(0, 13);
+            this.label3.TabIndex = 14;
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.Greyscale);
+            this.panel2.Controls.Add(this.Invert);
+            this.panel2.Controls.Add(this.Flip);
+            this.panel2.Controls.Add(this.Fog);
+            this.panel2.Location = new System.Drawing.Point(686, 116);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(219, 158);
+            this.panel2.TabIndex = 23;
+            // 
+            // Undo
+            // 
+            this.Undo.Enabled = false;
+            this.Undo.Location = new System.Drawing.Point(698, 22);
+            this.Undo.Name = "Undo";
+            this.Undo.Size = new System.Drawing.Size(75, 23);
+            this.Undo.TabIndex = 24;
+            this.Undo.Text = "Undo";
+            this.Undo.UseVisualStyleBackColor = true;
+            this.Undo.Click += new System.EventHandler(this.Undo_Click);
+            // 
+            // Redo
+            // 
+            this.Redo.Enabled = false;
+            this.Redo.Location = new System.Drawing.Point(607, 22);
+            this.Redo.Name = "Redo";
+            this.Redo.Size = new System.Drawing.Size(75, 23);
+            this.Redo.TabIndex = 25;
+            this.Redo.Text = "Redo";
+            this.Redo.UseVisualStyleBackColor = true;
+            this.Redo.Click += new System.EventHandler(this.Redo_Click);
+            // 
             // Editor
             // 
             this.ClientSize = new System.Drawing.Size(908, 501);
+            this.Controls.Add(this.Undo);
+            this.Controls.Add(this.panel2);
+            this.Controls.Add(this.Redo);
+            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.Adjustment);
+            this.Controls.Add(this.Filter);
             this.Controls.Add(this.Download);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.label3);
             this.Controls.Add(this.Upload);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.Contrast);
-            this.Controls.Add(this.Brightness);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.Flip);
-            this.Controls.Add(this.Greyscale);
-            this.Controls.Add(this.Invert);
             this.Controls.Add(this.Clear);
             this.Controls.Add(this.Profile);
             this.Controls.Add(this.Options);
@@ -276,8 +368,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Brightness)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Contrast)).EndInit();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
+            this.panel2.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -293,16 +387,23 @@
         private System.Windows.Forms.Button Flip;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.PictureBox pictureBox2;
-        private System.Windows.Forms.TrackBar Brightness;
-        private System.Windows.Forms.TrackBar Contrast;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ToolStripMenuItem logoutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem registerToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loginToolStripMenuItem;
         private System.Windows.Forms.Button Upload;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button Download;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TrackBar Brightness;
+        private System.Windows.Forms.TrackBar Contrast;
+        private System.Windows.Forms.Button Filter;
+        private System.Windows.Forms.Button Adjustment;
+        private System.Windows.Forms.Button Fog;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Button Undo;
+        private System.Windows.Forms.Button Redo;
     }
 }

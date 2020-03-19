@@ -13,11 +13,9 @@ namespace PhotoEditor
 {
     public partial class Login : Form
     {
-        public static string email ;
         public static string constring = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=PhotoEditor;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-
+        public static string email;
         public static string pass ;
-
         public static bool status;
         public Login()
         {

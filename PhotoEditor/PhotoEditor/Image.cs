@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PhotoEditor
 {
-    class Image
+    public class Image
     {
         public Image(int id, string name, string type, DateTime date)
         {
