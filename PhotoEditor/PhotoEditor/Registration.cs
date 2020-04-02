@@ -53,7 +53,11 @@ namespace PhotoEditor
                     cmd.ExecuteNonQuery();
                 }
                 // Closes the parent form.
-                label5.Text="Record was successfully added!";
+                label5.Text="Registration was successful!";
+                textBox1.Text = "";
+                textBox2.Text = "";
+                textBox3.Text = "";
+                textBox4.Text = "";
             }
         }
         

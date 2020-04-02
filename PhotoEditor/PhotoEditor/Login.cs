@@ -17,6 +17,8 @@ namespace PhotoEditor
         public static string email;
         public static string pass ;
         public static bool status;
+        public static int uid;
+
         public Login()
         {
             InitializeComponent();
@@ -49,6 +51,7 @@ namespace PhotoEditor
                     {
                         email = rd["Email"].ToString();
                         pass = rd["Password"].ToString();
+                        uid = Convert.ToInt32(rd["UId"]);
                     }
                     Login.status = true;
                     this.Hide();

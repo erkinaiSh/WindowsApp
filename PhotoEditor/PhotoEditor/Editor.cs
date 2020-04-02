@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -14,11 +15,13 @@ namespace PhotoEditor
 {
     public partial class Editor : Form
     {
+        public static string constring = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=PhotoEditor;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
         Stack<Bitmap> UChanges = new Stack<Bitmap>(5);
         Stack<Bitmap> RChanges = new Stack<Bitmap>(5);
         Registration r;
         Login l;
         Bitmap tempbm;
+        public static int currimgid = -99 ;
 
         public void UCAdd(Bitmap img)
         {
@@ -36,7 +39,10 @@ namespace PhotoEditor
         {
             InitializeComponent();
             if (pictureBox2.Image == null)
-                Download.Enabled=false;
+            {
+                Download.Enabled = false;
+                Save.Enabled = false;
+            }
 
             if (!string.IsNullOrEmpty(Login.email) && !string.IsNullOrEmpty(Login.pass)){
                 
@@ -63,8 +69,10 @@ namespace PhotoEditor
             {
 
                 if (pictureBox2.Image == null)
+                {
                     Download.Enabled = false;
-
+                    Save.Enabled = false;
+                }
                 if (Login.status)
                 {
                     
@@ -109,6 +117,8 @@ namespace PhotoEditor
                 Fog.Enabled = true;
                 Brightness.Enabled = true;
                 pictureBox2.Image = null;
+                Download.Enabled = false;
+                Save.Enabled = false;
                 RChanges.Clear();
                 UChanges.Clear();
             }
@@ -138,6 +148,68 @@ namespace PhotoEditor
                 }
 
             }
+        }
+
+        private void Save_Click(object sender, EventArgs e)
+        {
+            string basepath = Directory.GetCurrentDirectory();
+            string Ignm = "Image";
+            DateTime currdate = DateTime.Now;
+            if (textBox1.Text != "")
+                Ignm = textBox1.Text;
+            if (currimgid < 0)
+            {
+                int imgorg = 00;
+                using (SqlConnection con = new SqlConnection(constring))
+                {
+
+                    string query = "insert into [Image](UId, ImageName, ImageType, Date) OUTPUT INSERTED.IId values(@uid, @name, @type, @date)";
+                    SqlCommand cmd = new SqlCommand(query, con);
+                    cmd.Parameters.Add(new SqlParameter("@name", Ignm));
+                    cmd.Parameters.Add(new SqlParameter("@uid", Login.uid));
+                    cmd.Parameters.Add(new SqlParameter("@type", true));
+                    cmd.Parameters.Add(new SqlParameter("@Date", currdate));
+                    con.Open();
+                    imgorg = (int)cmd.ExecuteScalar();
+                }
+                string basepath1 = basepath + "\\"+imgorg.ToString()+".png";
+                pictureBox1.Image.Save(basepath1, ImageFormat.Png);
+                using (SqlConnection con = new SqlConnection(constring))
+                {
+
+                    string query = "insert into [Image](UId, ImageName, ImageType, Date) OUTPUT INSERTED.IId values(@uid, @name, @type, @date)";
+                    SqlCommand cmd = new SqlCommand(query, con);
+                    cmd.Parameters.Add(new SqlParameter("@name", Ignm));
+                    cmd.Parameters.Add(new SqlParameter("@uid", Login.uid));
+                    cmd.Parameters.Add(new SqlParameter("@type", false));
+                    cmd.Parameters.Add(new SqlParameter("@date", currdate));
+                    con.Open();
+                    currimgid = (int)cmd.ExecuteScalar();
+                }
+                string basepath2 = basepath + "\\" + currimgid.ToString() + ".png";
+                pictureBox2.Image.Save(basepath2, ImageFormat.Png);
+                label5.Text = "Image Stored successfully for the first time" + basepath2;
+            }
+            else
+            {
+                if (MessageBox.Show("Override", "You have already saved this image do you wish to overwrite it ? ", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    using (SqlConnection con = new SqlConnection(constring))
+                    {
+                        currdate = DateTime.Now;
+                        string query = "UPDATE Image SET Date = @dnew WHERE IId = @imgid";
+                        SqlCommand cmd = new SqlCommand(query, con);
+                        cmd.Parameters.Add(new SqlParameter("@dnew", currdate));
+                        cmd.Parameters.Add(new SqlParameter("@imgid", currimgid));
+                        con.Open();
+                    }
+                    string basepath3 = basepath + "\\" + currimgid.ToString() + ".png";
+                    File.Delete(@basepath3);
+                    pictureBox2.Image.Save(basepath3, ImageFormat.Png);
+                    label5.Text = "Image Overriden successfully";
+                }
+            }
+
         }
 
 
@@ -171,6 +243,8 @@ namespace PhotoEditor
             {
 
                 Download.Enabled = true;
+                if (Login.status)
+                    Save.Enabled = true;
                 Bitmap bmap = tempbm;
 
                 UCAdd((Bitmap)tempbm);
@@ -208,6 +282,8 @@ namespace PhotoEditor
             {
 
                 Download.Enabled = true;
+                if (Login.status)
+                    Save.Enabled = true;
                 Bitmap bmap = tempbm;
 
                 UCAdd((Bitmap)tempbm);
@@ -232,6 +308,8 @@ namespace PhotoEditor
             if (pictureBox1.Image != null)
             {
                 Download.Enabled = true;
+                if (Login.status)
+                    Save.Enabled = true;
                 Bitmap bmap = tempbm;
 
                 UCAdd((Bitmap)tempbm);
@@ -260,6 +338,8 @@ namespace PhotoEditor
             if (pictureBox1.Image != null)
             {
                 Download.Enabled = true;
+                if (Login.status)
+                    Save.Enabled = true;
                 Bitmap bmap = tempbm;
 
                 UCAdd((Bitmap)tempbm);
@@ -274,6 +354,8 @@ namespace PhotoEditor
         public void SetBrightness(int brightness)
         {
             Download.Enabled = true;
+            if (Login.status)
+                Save.Enabled = true;
             //Bitmap temp = (Bitmap)_currentBitmap;
             Bitmap bmap = (Bitmap)tempbm.Clone();
             if (brightness < -255) brightness = -255;
@@ -310,6 +392,8 @@ namespace PhotoEditor
             if (pictureBox1.Image != null)
             {
                 Download.Enabled = true;
+                if (Login.status)
+                    Save.Enabled = true;
                 label4.Text = Brightness.Value.ToString();
                 SetBrightness(Brightness.Value);
             }
@@ -319,6 +403,8 @@ namespace PhotoEditor
         {
 
             Download.Enabled = true;
+            if (Login.status)
+                Save.Enabled = true;
             Bitmap bmap = (Bitmap)tempbm.Clone();
             if (contrast < -100) contrast = -100;
             if (contrast > 100) contrast = 100;
@@ -366,7 +452,9 @@ namespace PhotoEditor
         {
             if (pictureBox1.Image != null)
             {
-                Download.Enabled = true;    
+                Download.Enabled = true;
+                if (Login.status)
+                    Save.Enabled = true;
                 label3.Text = Contrast.Value.ToString();
                 SetContrast(Contrast.Value);
             }
@@ -393,6 +481,7 @@ namespace PhotoEditor
         {
             Clear.Enabled = false;
             Download.Enabled = false;
+            Save.Enabled = false;
             pictureBox1.Image = null;
             pictureBox2.Image = null;
             Invert.Enabled = false;
@@ -401,6 +490,7 @@ namespace PhotoEditor
             Fog.Enabled = false;
             Brightness.Enabled = false;
             Contrast.Enabled = false;
+            currimgid = -99;
         }
 
         private void label4_Click(object sender, EventArgs e)
@@ -442,6 +532,11 @@ namespace PhotoEditor
                     Redo.Enabled = true;
                 }
             }
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
