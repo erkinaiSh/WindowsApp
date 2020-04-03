@@ -52,19 +52,18 @@
             this.Filter = new System.Windows.Forms.Button();
             this.Adjustment = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.SaveCB = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.Vertical = new System.Windows.Forms.Button();
+            this.Sepia = new System.Windows.Forms.Button();
             this.Undo = new System.Windows.Forms.Button();
             this.Redo = new System.Windows.Forms.Button();
             this.Save = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.Ruser = new System.Windows.Forms.Button();
-            this.SaveCB = new System.Windows.Forms.Button();
-            this.Sepia = new System.Windows.Forms.Button();
-            this.Vertical = new System.Windows.Forms.Button();
             this.contextMenuStrip1.SuspendLayout();
             this.contextMenuStrip2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -305,6 +304,16 @@
             this.panel1.TabIndex = 22;
             this.panel1.Visible = false;
             // 
+            // SaveCB
+            // 
+            this.SaveCB.Location = new System.Drawing.Point(139, 127);
+            this.SaveCB.Name = "SaveCB";
+            this.SaveCB.Size = new System.Drawing.Size(75, 23);
+            this.SaveCB.TabIndex = 16;
+            this.SaveCB.Text = "Save Filter";
+            this.SaveCB.UseVisualStyleBackColor = true;
+            this.SaveCB.Click += new System.EventHandler(this.SaveCB_Click);
+            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -334,6 +343,28 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(219, 158);
             this.panel2.TabIndex = 23;
+            // 
+            // Vertical
+            // 
+            this.Vertical.Enabled = false;
+            this.Vertical.Location = new System.Drawing.Point(117, 16);
+            this.Vertical.Name = "Vertical";
+            this.Vertical.Size = new System.Drawing.Size(80, 32);
+            this.Vertical.TabIndex = 31;
+            this.Vertical.Text = "Flip Vertical";
+            this.Vertical.UseVisualStyleBackColor = true;
+            this.Vertical.Click += new System.EventHandler(this.Vertical_Click);
+            // 
+            // Sepia
+            // 
+            this.Sepia.Enabled = false;
+            this.Sepia.Location = new System.Drawing.Point(12, 67);
+            this.Sepia.Name = "Sepia";
+            this.Sepia.Size = new System.Drawing.Size(75, 23);
+            this.Sepia.TabIndex = 31;
+            this.Sepia.Text = "Sepia";
+            this.Sepia.UseVisualStyleBackColor = true;
+            this.Sepia.Click += new System.EventHandler(this.Sepia_Click);
             // 
             // Undo
             // 
@@ -375,14 +406,6 @@
             this.textBox1.TabIndex = 27;
             this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(472, 46);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(0, 13);
-            this.label5.TabIndex = 28;
-            // 
             // listBox1
             // 
             this.listBox1.FormattingEnabled = true;
@@ -403,44 +426,11 @@
             this.Ruser.Visible = false;
             this.Ruser.Click += new System.EventHandler(this.Ruser_Click);
             // 
-            // SaveCB
-            // 
-            this.SaveCB.Location = new System.Drawing.Point(139, 127);
-            this.SaveCB.Name = "SaveCB";
-            this.SaveCB.Size = new System.Drawing.Size(75, 23);
-            this.SaveCB.TabIndex = 16;
-            this.SaveCB.Text = "Save Filter";
-            this.SaveCB.UseVisualStyleBackColor = true;
-            this.SaveCB.Click += new System.EventHandler(this.SaveCB_Click);
-            // 
-            // Sepia
-            // 
-            this.Sepia.Enabled = false;
-            this.Sepia.Location = new System.Drawing.Point(12, 67);
-            this.Sepia.Name = "Sepia";
-            this.Sepia.Size = new System.Drawing.Size(75, 23);
-            this.Sepia.TabIndex = 31;
-            this.Sepia.Text = "Sepia";
-            this.Sepia.UseVisualStyleBackColor = true;
-            this.Sepia.Click += new System.EventHandler(this.Sepia_Click);
-            // 
-            // Vertical
-            // 
-            this.Vertical.Enabled = false;
-            this.Vertical.Location = new System.Drawing.Point(117, 16);
-            this.Vertical.Name = "Vertical";
-            this.Vertical.Size = new System.Drawing.Size(80, 32);
-            this.Vertical.TabIndex = 31;
-            this.Vertical.Text = "Flip Vertical";
-            this.Vertical.UseVisualStyleBackColor = true;
-            this.Vertical.Click += new System.EventHandler(this.Vertical_Click);
-            // 
             // Editor
             // 
             this.ClientSize = new System.Drawing.Size(908, 501);
             this.Controls.Add(this.Ruser);
             this.Controls.Add(this.listBox1);
-            this.Controls.Add(this.label5);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.Save);
             this.Controls.Add(this.Undo);
@@ -457,6 +447,7 @@
             this.Controls.Add(this.Profile);
             this.Controls.Add(this.Options);
             this.Name = "Editor";
+            this.Load += new System.EventHandler(this.Editor_Load);
             this.contextMenuStrip1.ResumeLayout(false);
             this.contextMenuStrip2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -503,7 +494,6 @@
         private System.Windows.Forms.Button Redo;
         private System.Windows.Forms.Button Save;
         private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.Button Ruser;
         private System.Windows.Forms.Button SaveCB;

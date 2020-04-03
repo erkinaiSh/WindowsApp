@@ -29,3 +29,4 @@ E:\OOSE Project\OOSE-Project\PhotoEditor\PhotoEditor\obj\Debug\PhotoEditor.Login
 E:\OOSE Project\OOSE-Project\PhotoEditor\PhotoEditor\obj\Debug\PhotoEditor.Properties.Resources.resources
 E:\OOSE Project\OOSE-Project\PhotoEditor\PhotoEditor\obj\Debug\PhotoEditor.Registration.resources
 E:\OOSE Project\OOSE-Project\PhotoEditor\PhotoEditor\obj\Debug\PhotoEditor.csproj.GenerateResource.Cache
+E:\OOSE Project\OOSE-Project\PhotoEditor\PhotoEditor\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll

@@ -190,7 +190,7 @@ namespace PhotoEditor
                             break;
                     }
                     pictureBox2.Image.Save(sfd.FileName, format);
-                    MessageBox.Show("Image Saved Succesfully at location : \n" + sfd.FileName);
+                    MessageBox.Show("Image Downloaded Succesfully at location : \n" + sfd.FileName);
                 }
 
             }
@@ -236,7 +236,8 @@ namespace PhotoEditor
                 imglist.Add(currimgid);
                 contextMenuStrip1.Items.Add(Ignm);
                 pictureBox2.Image.Save(basepath2, ImageFormat.Png);
-                label5.Text = "Image Stored successfully for the first time.";
+                MessageBox.Show("Image Stored successfully for the first time.");
+                
             }
             else
             {
@@ -245,19 +246,23 @@ namespace PhotoEditor
                     using (SqlConnection con = new SqlConnection(constring))
                     {
                         currdate = DateTime.Now;
-                        string query = "UPDATE Image SET Date = @dnew ImageName = @ignm WHERE IId = @imgid";
+                        string query = "UPDATE Image SET Date = @dnew, ImageName = @ignm WHERE IId = @imgid";
                         SqlCommand cmd = new SqlCommand(query, con);
 
-                        cmd.Parameters.Add(new SqlParameter("@name", Ignm));
+                        cmd.Parameters.Add(new SqlParameter("@ignm", Ignm));
                         cmd.Parameters.Add(new SqlParameter("@dnew", currdate));
                         cmd.Parameters.Add(new SqlParameter("@imgid", currimgid));
                         con.Open();
                         cmd.ExecuteNonQuery();
                     }
+
                     string basepath3 = basepath + "\\" + currimgid.ToString() + ".png";
                     File.Delete(@basepath3);
+                    Bitmap tpo = (Bitmap)pictureBox2.Image.Clone();
+
                     pictureBox2.Image.Save(basepath3, ImageFormat.Png);
-                    label5.Text = "Image Overriden successfully.";
+                    MessageBox.Show("Image Overriden successfully.");
+                     
                 }
             }
 
@@ -348,13 +353,13 @@ namespace PhotoEditor
                 Bitmap bmpInverted = new Bitmap(bmap.Width, bmap.Height);
                 ImageAttributes ia = new ImageAttributes();
                 ColorMatrix cmPicture = new ColorMatrix(new float[][]
-{
-    new float[] {-1, 0, 0, 0, 0},
-    new float[] {0, -1, 0, 0, 0},
-    new float[] {0, 0, -1, 0, 0},
-    new float[] {0, 0, 0, 1, 0},
-    new float[] {1, 1, 1, 0, 1}
-});
+                {
+                    new float[] {-1, 0, 0, 0, 0},
+                    new float[] {0, -1, 0, 0, 0},
+                    new float[] {0, 0, -1, 0, 0},
+                    new float[] {0, 0, 0, 1, 0},
+                    new float[] {1, 1, 1, 0, 1}
+                });
                 ia.SetColorMatrix(cmPicture);
                 Graphics g = Graphics.FromImage(bmpInverted);
                 g.DrawImage(bmap, new Rectangle(0, 0, bmap.Width, bmap.Height), 0, 0, bmap.Width, bmap.Height, GraphicsUnit.Pixel, ia);
@@ -493,8 +498,7 @@ namespace PhotoEditor
         Color.FromArgb((byte)cR, (byte)cG, (byte)cB));
                 }
             }
-            pictureBox2.Image = bmap;      
-
+            pictureBox2.Image = bmap;  
         }
 
         private void Brightness_Scroll(object sender, EventArgs e)
@@ -511,7 +515,6 @@ namespace PhotoEditor
 
         public void SetContrast(double contrast)
         {
-
             Download.Enabled = true;
             if (Login.status)
                 Save.Enabled = true;
@@ -673,9 +676,13 @@ namespace PhotoEditor
                 int i = parent.Items.IndexOf(e.ClickedItem);
                 int indedit = imglist.ElementAt(i - 2);
                 string basepath = Directory.GetCurrentDirectory();
-                pictureBox1.Image = new Bitmap(basepath+"\\"+(indedit-1)+".png");
-                pictureBox2.Image = new Bitmap(basepath + "\\" + (indedit)+".png");
-                tempbm = new Bitmap(basepath + "\\" + (indedit) + ".png");
+                Bitmap tpo1 = new Bitmap(basepath+"\\"+(indedit-1)+".png");
+                Bitmap tpo2 = new Bitmap(basepath + "\\" + (indedit)+".png");
+                pictureBox1.Image = tpo1.GetThumbnailImage(350, 350, null, new IntPtr());
+                pictureBox2.Image = tpo2.GetThumbnailImage(350, 350, null, new IntPtr());
+                tempbm = (Bitmap)pictureBox2.Image.Clone();
+                tpo1.Dispose();
+                tpo2.Dispose();
                 currimgid = indedit;
                 textBox1.Text = e.ClickedItem.Text;
 
@@ -731,6 +738,9 @@ namespace PhotoEditor
             label4.Text = "";
         }
 
-        
+        private void Editor_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
