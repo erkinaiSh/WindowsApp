@@ -18,6 +18,7 @@ namespace PhotoEditor
         public static string constring = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=PhotoEditor;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
         Stack<Bitmap> UChanges = new Stack<Bitmap>(5);
         Stack<Bitmap> RChanges = new Stack<Bitmap>(5);
+        List<int> imglist = new List<int>();
         Registration r;
         Login l;
         Bitmap tempbm;
@@ -50,9 +51,9 @@ namespace PhotoEditor
                 if (Login.status)
                 {
                     MessageBox.Show(Login.pass +" "+ Login.email);
-
-                    contextMenuStrip1.Items.Add(Login.pass);
+                    
                     contextMenuStrip1.Items.Add(Login.email);
+
                     Options.Hide();
                     Profile.Show();
                 }
@@ -76,8 +77,25 @@ namespace PhotoEditor
                 if (Login.status)
                 {
                     
-                    contextMenuStrip1.Items.Add("Username : " + Login.pass);
-                    contextMenuStrip1.Items.Add("Password : " + Login.email);
+                    contextMenuStrip1.Items.Add("Username : " + Login.email);
+                    using (SqlConnection con = new SqlConnection(constring))
+                    {
+
+                        string query = "select * from [Image] where UId=@uid";
+                        SqlCommand cmd = new SqlCommand(query, con);
+                        cmd.Parameters.Add(new SqlParameter("@uid", Login.uid));
+                        con.Open();
+                        SqlDataReader rd = cmd.ExecuteReader();
+                        while (rd.Read())
+                        {
+                            if (!Convert.ToBoolean(rd["ImageType"]))
+                            {
+                                imglist.Add(Convert.ToInt32(rd["IId"]));
+                                contextMenuStrip1.Items.Add(rd["ImageName"].ToString());
+                            }
+                        }
+                         
+                    }
                     Options.Hide();
                     Profile.Show();
                     NoImage();
@@ -187,26 +205,31 @@ namespace PhotoEditor
                     currimgid = (int)cmd.ExecuteScalar();
                 }
                 string basepath2 = basepath + "\\" + currimgid.ToString() + ".png";
+                imglist.Add(currimgid);
+                contextMenuStrip1.Items.Add(Ignm);
                 pictureBox2.Image.Save(basepath2, ImageFormat.Png);
-                label5.Text = "Image Stored successfully for the first time" + basepath2;
+                label5.Text = "Image Stored successfully for the first time.";
             }
             else
             {
-                if (MessageBox.Show("Override", "You have already saved this image do you wish to overwrite it ? ", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (MessageBox.Show("You have already saved this image do you wish to overwrite it ?", "Override", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     using (SqlConnection con = new SqlConnection(constring))
                     {
                         currdate = DateTime.Now;
-                        string query = "UPDATE Image SET Date = @dnew WHERE IId = @imgid";
+                        string query = "UPDATE Image SET Date = @dnew ImageName = @ignm WHERE IId = @imgid";
                         SqlCommand cmd = new SqlCommand(query, con);
+
+                        cmd.Parameters.Add(new SqlParameter("@name", Ignm));
                         cmd.Parameters.Add(new SqlParameter("@dnew", currdate));
                         cmd.Parameters.Add(new SqlParameter("@imgid", currimgid));
                         con.Open();
+                        cmd.ExecuteNonQuery();
                     }
                     string basepath3 = basepath + "\\" + currimgid.ToString() + ".png";
                     File.Delete(@basepath3);
                     pictureBox2.Image.Save(basepath3, ImageFormat.Png);
-                    label5.Text = "Image Overriden successfully";
+                    label5.Text = "Image Overriden successfully.";
                 }
             }
 
@@ -231,7 +254,10 @@ namespace PhotoEditor
         {
             l.Dispose();
             contextMenuStrip1.Items.RemoveAt(1);
-            contextMenuStrip1.Items.RemoveAt(1);
+            int rmv = imglist.Count;
+            for (int i = 0; i < rmv; i++)
+                contextMenuStrip1.Items.RemoveAt(1);
+            imglist.Clear();
             NoImage();
             Profile.Hide();
             Options.Show();
@@ -247,20 +273,24 @@ namespace PhotoEditor
                     Save.Enabled = true;
                 Bitmap bmap = tempbm;
 
-                UCAdd((Bitmap)tempbm);
-                Color c;
-                for (int i = 0; i < bmap.Width; i++)
-                {
-                    for (int j = 0; j < bmap.Height; j++)
-                    {
-                        c = bmap.GetPixel(i, j);
-                        byte gray = (byte)(.299 * c.R + .587 * c.G + .114 * c.B);
-
-                        bmap.SetPixel(i, j, Color.FromArgb(gray, gray, gray));
-                    }
-                }
-                pictureBox2.Image = bmap;
-                tempbm = bmap;
+                UCAdd((Bitmap)tempbm.Clone());
+                Bitmap bmpInverted = new Bitmap(bmap.Width, bmap.Height);
+                ImageAttributes ia = new ImageAttributes();
+                ColorMatrix cmPicture = new ColorMatrix(
+          new float[][]
+          {
+             new float[] {.3f, .3f, .3f, 0, 0},
+             new float[] {.59f, .59f, .59f, 0, 0},
+             new float[] {.11f, .11f, .11f, 0, 0},
+             new float[] {0, 0, 0, 1, 0},
+             new float[] {0, 0, 0, 0, 1}
+          });
+                ia.SetColorMatrix(cmPicture);
+                Graphics g = Graphics.FromImage(bmpInverted);
+                g.DrawImage(bmap, new Rectangle(0, 0, bmap.Width, bmap.Height), 0, 0, bmap.Width, bmap.Height, GraphicsUnit.Pixel, ia);
+                g.Dispose();
+                pictureBox2.Image = bmpInverted;
+                tempbm = bmpInverted;
                 RChanges.Clear();
             }
         }
@@ -286,19 +316,23 @@ namespace PhotoEditor
                     Save.Enabled = true;
                 Bitmap bmap = tempbm;
 
-                UCAdd((Bitmap)tempbm);
-                Color c;
-                for (int i = 0; i < bmap.Width; i++)
-                {
-                    for (int j = 0; j < bmap.Height; j++)
-                    {
-                        c = bmap.GetPixel(i, j);
-                        bmap.SetPixel(i, j,
-          Color.FromArgb(255 - c.R, 255 - c.G, 255 - c.B));
-                    }
-                }
-                pictureBox2.Image = bmap;
-                tempbm = bmap;
+                UCAdd((Bitmap)tempbm.Clone());
+                Bitmap bmpInverted = new Bitmap(bmap.Width, bmap.Height);
+                ImageAttributes ia = new ImageAttributes();
+                ColorMatrix cmPicture = new ColorMatrix(new float[][]
+{
+    new float[] {-1, 0, 0, 0, 0},
+    new float[] {0, -1, 0, 0, 0},
+    new float[] {0, 0, -1, 0, 0},
+    new float[] {0, 0, 0, 1, 0},
+    new float[] {1, 1, 1, 0, 1}
+});
+                ia.SetColorMatrix(cmPicture);
+                Graphics g = Graphics.FromImage(bmpInverted);
+                g.DrawImage(bmap, new Rectangle(0, 0, bmap.Width, bmap.Height), 0, 0, bmap.Width, bmap.Height, GraphicsUnit.Pixel, ia);
+                g.Dispose();
+                pictureBox2.Image = bmpInverted;
+                tempbm = bmpInverted;
                 RChanges.Clear();
             }
         }
@@ -312,7 +346,7 @@ namespace PhotoEditor
                     Save.Enabled = true;
                 Bitmap bmap = tempbm;
 
-                UCAdd((Bitmap)tempbm);
+                UCAdd((Bitmap)tempbm.Clone());
                 Bitmap bmpInverted = new Bitmap(bmap.Width, bmap.Height);
                 ImageAttributes ia = new ImageAttributes();                 
                 ColorMatrix cmPicture = new ColorMatrix(new float[][]       
@@ -342,7 +376,7 @@ namespace PhotoEditor
                     Save.Enabled = true;
                 Bitmap bmap = tempbm;
 
-                UCAdd((Bitmap)tempbm);
+                UCAdd((Bitmap)tempbm.Clone());
                 bmap.RotateFlip(RotateFlipType.Rotate180FlipY);
                 pictureBox2.Image = bmap;
 
@@ -485,12 +519,17 @@ namespace PhotoEditor
             pictureBox1.Image = null;
             pictureBox2.Image = null;
             Invert.Enabled = false;
+            textBox1.Text = "";
             Greyscale.Enabled = false;
+            UChanges.Clear();
+            RChanges.Clear();
             Flip.Enabled = false;
             Fog.Enabled = false;
             Brightness.Enabled = false;
             Contrast.Enabled = false;
             currimgid = -99;
+            Contrast.Value = 0;
+            Brightness.Value = 0;
         }
 
         private void label4_Click(object sender, EventArgs e)
@@ -502,7 +541,7 @@ namespace PhotoEditor
         {
             if (UChanges.Count != 0)
             {
-                RCAdd((Bitmap)pictureBox2.Image);
+                RCAdd((Bitmap)pictureBox2.Image.Clone());
                 pictureBox2.Image = UChanges.Pop();
                 tempbm = (Bitmap)pictureBox2.Image.Clone();
                 if (UChanges.Count == 0)
@@ -520,7 +559,7 @@ namespace PhotoEditor
         {
             if (RChanges.Count != 0)
             {
-                UCAdd((Bitmap)pictureBox2.Image);
+                UCAdd((Bitmap)pictureBox2.Image.Clone());
                 pictureBox2.Image = RChanges.Pop();
                 tempbm = (Bitmap)pictureBox2.Image.Clone();
                 if (RChanges.Count == 0)
@@ -537,6 +576,42 @@ namespace PhotoEditor
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void contextMenuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            bool displaysvimg = true;
+            if (currimgid < 0 && pictureBox2.Image!=null)
+            {
+                if (MessageBox.Show("You have not saved the editor image, do you want to load the other saved image?", "Confirmation", MessageBoxButtons.YesNo) == DialogResult.No)
+                    displaysvimg = false;
+            }
+            if (displaysvimg)
+            {
+                var parent = (ContextMenuStrip)sender;
+                int i = parent.Items.IndexOf(e.ClickedItem);
+                int indedit = imglist.ElementAt(i - 2);
+                string basepath = Directory.GetCurrentDirectory();
+                pictureBox1.Image = new Bitmap(basepath+"\\"+(indedit-1)+".png");
+                pictureBox2.Image = new Bitmap(basepath + "\\" + (indedit)+".png");
+                tempbm = new Bitmap(basepath + "\\" + (indedit) + ".png");
+                currimgid = indedit;
+                textBox1.Text = e.ClickedItem.Text;
+
+                Clear.Enabled = true;
+                Download.Enabled = true;
+                Save.Enabled = true;
+                Invert.Enabled = true;
+                Greyscale.Enabled = true;
+                Flip.Enabled = true;
+                Fog.Enabled = true;
+                Brightness.Enabled = true;
+                Contrast.Enabled = true;
+                UChanges.Clear();
+                RChanges.Clear();
+                Brightness.Value = 0;
+                Contrast.Value = 0;
+            }
         }
     }
 }
