@@ -60,6 +60,11 @@
             this.Save = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
+            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.Ruser = new System.Windows.Forms.Button();
+            this.SaveCB = new System.Windows.Forms.Button();
+            this.Sepia = new System.Windows.Forms.Button();
+            this.Vertical = new System.Windows.Forms.Button();
             this.contextMenuStrip1.SuspendLayout();
             this.contextMenuStrip2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -104,7 +109,7 @@
             // Invert
             // 
             this.Invert.Enabled = false;
-            this.Invert.Location = new System.Drawing.Point(12, 55);
+            this.Invert.Location = new System.Drawing.Point(12, 117);
             this.Invert.Name = "Invert";
             this.Invert.Size = new System.Drawing.Size(75, 23);
             this.Invert.TabIndex = 3;
@@ -115,7 +120,7 @@
             // Greyscale
             // 
             this.Greyscale.Enabled = false;
-            this.Greyscale.Location = new System.Drawing.Point(122, 55);
+            this.Greyscale.Location = new System.Drawing.Point(117, 117);
             this.Greyscale.Name = "Greyscale";
             this.Greyscale.Size = new System.Drawing.Size(75, 23);
             this.Greyscale.TabIndex = 4;
@@ -163,17 +168,17 @@
             // Flip
             // 
             this.Flip.Enabled = false;
-            this.Flip.Location = new System.Drawing.Point(12, 12);
+            this.Flip.Location = new System.Drawing.Point(12, 16);
             this.Flip.Name = "Flip";
-            this.Flip.Size = new System.Drawing.Size(75, 23);
+            this.Flip.Size = new System.Drawing.Size(86, 32);
             this.Flip.TabIndex = 7;
-            this.Flip.Text = "Flip";
+            this.Flip.Text = "Flip Horizontal";
             this.Flip.UseVisualStyleBackColor = true;
             this.Flip.Click += new System.EventHandler(this.Flip_Click);
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(12, 73);
+            this.pictureBox1.Location = new System.Drawing.Point(12, 95);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(326, 299);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -182,7 +187,7 @@
             // 
             // pictureBox2
             // 
-            this.pictureBox2.Location = new System.Drawing.Point(356, 73);
+            this.pictureBox2.Location = new System.Drawing.Point(356, 95);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(326, 299);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -212,7 +217,7 @@
             // Fog
             // 
             this.Fog.Enabled = false;
-            this.Fog.Location = new System.Drawing.Point(122, 12);
+            this.Fog.Location = new System.Drawing.Point(117, 67);
             this.Fog.Name = "Fog";
             this.Fog.Size = new System.Drawing.Size(75, 23);
             this.Fog.TabIndex = 8;
@@ -287,6 +292,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.SaveCB);
             this.panel1.Controls.Add(this.label4);
             this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.label2);
@@ -302,7 +308,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(123, 127);
+            this.label4.Location = new System.Drawing.Point(114, 127);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(0, 13);
             this.label4.TabIndex = 15;
@@ -311,18 +317,20 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(123, 51);
+            this.label3.Location = new System.Drawing.Point(114, 51);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(0, 13);
             this.label3.TabIndex = 14;
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.Vertical);
+            this.panel2.Controls.Add(this.Sepia);
             this.panel2.Controls.Add(this.Greyscale);
             this.panel2.Controls.Add(this.Invert);
             this.panel2.Controls.Add(this.Flip);
             this.panel2.Controls.Add(this.Fog);
-            this.panel2.Location = new System.Drawing.Point(686, 116);
+            this.panel2.Location = new System.Drawing.Point(688, 116);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(219, 158);
             this.panel2.TabIndex = 23;
@@ -330,7 +338,7 @@
             // Undo
             // 
             this.Undo.Enabled = false;
-            this.Undo.Location = new System.Drawing.Point(698, 22);
+            this.Undo.Location = new System.Drawing.Point(630, 25);
             this.Undo.Name = "Undo";
             this.Undo.Size = new System.Drawing.Size(75, 23);
             this.Undo.TabIndex = 24;
@@ -341,7 +349,7 @@
             // Redo
             // 
             this.Redo.Enabled = false;
-            this.Redo.Location = new System.Drawing.Point(607, 22);
+            this.Redo.Location = new System.Drawing.Point(535, 25);
             this.Redo.Name = "Redo";
             this.Redo.Size = new System.Drawing.Size(75, 23);
             this.Redo.TabIndex = 25;
@@ -375,9 +383,63 @@
             this.label5.Size = new System.Drawing.Size(0, 13);
             this.label5.TabIndex = 28;
             // 
+            // listBox1
+            // 
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.Location = new System.Drawing.Point(686, 280);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.Size = new System.Drawing.Size(129, 108);
+            this.listBox1.TabIndex = 29;
+            this.listBox1.Visible = false;
+            // 
+            // Ruser
+            // 
+            this.Ruser.Location = new System.Drawing.Point(821, 321);
+            this.Ruser.Name = "Ruser";
+            this.Ruser.Size = new System.Drawing.Size(75, 43);
+            this.Ruser.TabIndex = 30;
+            this.Ruser.Text = "Remove User";
+            this.Ruser.UseVisualStyleBackColor = true;
+            this.Ruser.Visible = false;
+            this.Ruser.Click += new System.EventHandler(this.Ruser_Click);
+            // 
+            // SaveCB
+            // 
+            this.SaveCB.Location = new System.Drawing.Point(139, 127);
+            this.SaveCB.Name = "SaveCB";
+            this.SaveCB.Size = new System.Drawing.Size(75, 23);
+            this.SaveCB.TabIndex = 16;
+            this.SaveCB.Text = "Save Filter";
+            this.SaveCB.UseVisualStyleBackColor = true;
+            this.SaveCB.Click += new System.EventHandler(this.SaveCB_Click);
+            // 
+            // Sepia
+            // 
+            this.Sepia.Enabled = false;
+            this.Sepia.Location = new System.Drawing.Point(12, 67);
+            this.Sepia.Name = "Sepia";
+            this.Sepia.Size = new System.Drawing.Size(75, 23);
+            this.Sepia.TabIndex = 31;
+            this.Sepia.Text = "Sepia";
+            this.Sepia.UseVisualStyleBackColor = true;
+            this.Sepia.Click += new System.EventHandler(this.Sepia_Click);
+            // 
+            // Vertical
+            // 
+            this.Vertical.Enabled = false;
+            this.Vertical.Location = new System.Drawing.Point(117, 16);
+            this.Vertical.Name = "Vertical";
+            this.Vertical.Size = new System.Drawing.Size(80, 32);
+            this.Vertical.TabIndex = 31;
+            this.Vertical.Text = "Flip Vertical";
+            this.Vertical.UseVisualStyleBackColor = true;
+            this.Vertical.Click += new System.EventHandler(this.Vertical_Click);
+            // 
             // Editor
             // 
             this.ClientSize = new System.Drawing.Size(908, 501);
+            this.Controls.Add(this.Ruser);
+            this.Controls.Add(this.listBox1);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.Save);
@@ -442,5 +504,10 @@
         private System.Windows.Forms.Button Save;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.Button Ruser;
+        private System.Windows.Forms.Button SaveCB;
+        private System.Windows.Forms.Button Sepia;
+        private System.Windows.Forms.Button Vertical;
     }
 }

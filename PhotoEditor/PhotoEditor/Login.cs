@@ -18,6 +18,7 @@ namespace PhotoEditor
         public static string pass ;
         public static bool status;
         public static int uid;
+        public static bool isadmin;
 
         public Login()
         {
@@ -52,6 +53,7 @@ namespace PhotoEditor
                         email = rd["Email"].ToString();
                         pass = rd["Password"].ToString();
                         uid = Convert.ToInt32(rd["UId"]);
+                        isadmin = Convert.ToBoolean(rd["Designation"]);
                     }
                     Login.status = true;
                     this.Hide();

@@ -19,6 +19,7 @@ namespace PhotoEditor
         Stack<Bitmap> UChanges = new Stack<Bitmap>(5);
         Stack<Bitmap> RChanges = new Stack<Bitmap>(5);
         List<int> imglist = new List<int>();
+        List<int> userlist = new List<int>();
         Registration r;
         Login l;
         Bitmap tempbm;
@@ -76,7 +77,7 @@ namespace PhotoEditor
                 }
                 if (Login.status)
                 {
-                    
+                    NoImage();
                     contextMenuStrip1.Items.Add("Username : " + Login.email);
                     using (SqlConnection con = new SqlConnection(constring))
                     {
@@ -96,9 +97,34 @@ namespace PhotoEditor
                         }
                          
                     }
+                    if (Login.isadmin)
+                    {
+                        listBox1.Visible = true;
+                        Ruser.Visible = true;
+                        using (SqlConnection con = new SqlConnection(constring))
+                        {
+
+                            string query = "select * from [User] where Designation = @desig";
+                            SqlCommand cmd = new SqlCommand(query, con);
+                            cmd.Parameters.Add(new SqlParameter("@desig", false));
+                            con.Open();
+                            SqlDataReader rd = cmd.ExecuteReader();
+                            while (rd.Read())
+                            {
+                                
+                                userlist.Add(Convert.ToInt32(rd["UId"]));
+                                listBox1.Items.Add(rd["Name"].ToString());
+                            }
+
+                        }
+                        if (userlist.Count == 0)
+                            Ruser.Enabled = false;
+                        Ruser.Visible = true;
+                        listBox1.Visible = true;
+                    }
                     Options.Hide();
                     Profile.Show();
-                    NoImage();
+                    
                 }
             }
             else
@@ -133,7 +159,9 @@ namespace PhotoEditor
                 Greyscale.Enabled = true;
                 Contrast.Enabled = true;
                 Fog.Enabled = true;
+                Sepia.Enabled = true;
                 Brightness.Enabled = true;
+                Vertical.Enabled = true;
                 pictureBox2.Image = null;
                 Download.Enabled = false;
                 Save.Enabled = false;
@@ -385,6 +413,54 @@ namespace PhotoEditor
             }
         }
 
+        private void Vertical_Click(object sender, EventArgs e)
+        {
+            if (pictureBox1.Image != null)
+            {
+                Download.Enabled = true;
+                if (Login.status)
+                    Save.Enabled = true;
+                Bitmap bmap = tempbm;
+
+                UCAdd((Bitmap)tempbm.Clone());
+                bmap.RotateFlip(RotateFlipType.Rotate180FlipX);
+                pictureBox2.Image = bmap;
+
+                tempbm = bmap;
+                RChanges.Clear();
+            }
+        }
+
+        private void Sepia_Click(object sender, EventArgs e)
+        {
+            if (pictureBox1.Image != null)
+            {
+                Download.Enabled = true;
+                if (Login.status)
+                    Save.Enabled = true;
+                Bitmap bmap = tempbm;
+
+                UCAdd((Bitmap)tempbm.Clone());
+                Bitmap bmpInverted = new Bitmap(bmap.Width, bmap.Height);
+                ImageAttributes ia = new ImageAttributes();
+                ColorMatrix cmPicture = new ColorMatrix(new float[][]
+                {
+                        new float[]{.393f, .349f, .272f, 0, 0},
+                        new float[]{.769f, .686f, .534f, 0, 0},
+                        new float[]{.189f, .168f, .131f, 0, 0},
+                        new float[]{0, 0, 0, 1, 0},
+                        new float[]{0, 0, 0, 0, 1}
+                });
+                ia.SetColorMatrix(cmPicture);
+                Graphics g = Graphics.FromImage(bmpInverted);
+                g.DrawImage(bmap, new Rectangle(0, 0, bmap.Width, bmap.Height), 0, 0, bmap.Width, bmap.Height, GraphicsUnit.Pixel, ia);
+                g.Dispose();
+                pictureBox2.Image = bmpInverted;
+                tempbm = bmpInverted;
+                RChanges.Clear();
+            }
+        }
+
         public void SetBrightness(int brightness)
         {
             Download.Enabled = true;
@@ -519,6 +595,7 @@ namespace PhotoEditor
             pictureBox1.Image = null;
             pictureBox2.Image = null;
             Invert.Enabled = false;
+            Sepia.Enabled = false;
             textBox1.Text = "";
             Greyscale.Enabled = false;
             UChanges.Clear();
@@ -526,7 +603,11 @@ namespace PhotoEditor
             Flip.Enabled = false;
             Fog.Enabled = false;
             Brightness.Enabled = false;
+            Ruser.Enabled = true;
+            Ruser.Visible = false;
+            listBox1.Visible = false;
             Contrast.Enabled = false;
+            Vertical.Enabled = false;
             currimgid = -99;
             Contrast.Value = 0;
             Brightness.Value = 0;
@@ -586,7 +667,7 @@ namespace PhotoEditor
                 if (MessageBox.Show("You have not saved the editor image, do you want to load the other saved image?", "Confirmation", MessageBoxButtons.YesNo) == DialogResult.No)
                     displaysvimg = false;
             }
-            if (displaysvimg)
+            if (displaysvimg && contextMenuStrip1.Items.IndexOf(e.ClickedItem)>1)
             {
                 var parent = (ContextMenuStrip)sender;
                 int i = parent.Items.IndexOf(e.ClickedItem);
@@ -604,7 +685,9 @@ namespace PhotoEditor
                 Invert.Enabled = true;
                 Greyscale.Enabled = true;
                 Flip.Enabled = true;
+                Sepia.Enabled = true;
                 Fog.Enabled = true;
+                Vertical.Enabled = true;
                 Brightness.Enabled = true;
                 Contrast.Enabled = true;
                 UChanges.Clear();
@@ -613,5 +696,41 @@ namespace PhotoEditor
                 Contrast.Value = 0;
             }
         }
+
+        private void Ruser_Click(object sender, EventArgs e)
+        {
+            string rmvusr = listBox1.GetItemText(listBox1.SelectedItem);
+
+            if (MessageBox.Show("Do you want to remove user : " + rmvusr + " ?", "Remove User", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                int ruind = listBox1.SelectedIndex;
+                int usrid = userlist.ElementAt(ruind);
+                using (SqlConnection con = new SqlConnection(constring))
+                {
+                    
+                    string query = "DELETE FROM [User] WHERE UId = @userid";
+                    SqlCommand cmd = new SqlCommand(query, con);
+
+                    cmd.Parameters.Add(new SqlParameter("@userid", usrid));
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
+                listBox1.Items.RemoveAt(ruind);
+                userlist.RemoveAt(ruind);
+                if (userlist.Count == 0)
+                    Ruser.Enabled = false;
+            }
+        }
+
+        private void SaveCB_Click(object sender, EventArgs e)
+        {
+            tempbm = (Bitmap)pictureBox2.Image.Clone();
+            Contrast.Value = 0;
+            Brightness.Value = 0;
+            label3.Text = "";
+            label4.Text = "";
+        }
+
+        
     }
 }
