@@ -1,8 +1,8 @@
 # Photo Editor C# (Windows Form Application)
 
-This project is the photo editor application, with help of it you edip your photos.
+This project is the photo editor application, with help of it you can edip your photos.
 To build this project I have used Windows Form Application(c#) and sql server for database.
-This application gives you opportunity to edit your photo(add, effects, rotate, contrast and etc.).
+This application gives you opportunity to edit your photo(add effects, rotate, color corrections, adjusting brightness and contrast, add filters and etc.).
 
 
 1.Look at the screenshots:
@@ -31,8 +31,8 @@ Aida Dosmurat kyzy COM19:
 It has many features and you can even registrate to this application."
 
 Aida Moldalieva COM19:
-"This application is working smoothly without any error. I personally liked this project because my groupmate Erkinai used every knogledge that we gained 
-whithin the time of half of semester in the Computer Organizations and Architecture course."
+"This application is working smoothly without any error. I personally liked this project because my groupmate Erkinai used every knowledge that we learned 
+in this half semester in the Computer Organizations and Architecture course."
 
 
 Aiperi Askarbek kyzy COM19:
